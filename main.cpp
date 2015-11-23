@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
+#include <cstdlib>
 
 #define MAX_ATTEMPTS 4		// Maximum amount of times the player can guess the word
 
@@ -81,7 +82,11 @@ void getWords (const int diffChoice, const int diffLength) {
 	std::string word = " ";
 	int startingChar = 0;
 
-	wordDatabase.open("words.txt");
+	std::string filename = "words_";
+	filename += std::to_string(diffLength);
+	filename += ".txt";
+
+	wordDatabase.open(filename.c_str());
 
 	srand(time(NULL));
 	
@@ -90,9 +95,9 @@ void getWords (const int diffChoice, const int diffLength) {
 	for (int i = 0; i < wordList.size(); i++) {
 		do {
 			// Read in a random number of lines to help randomize the word bank
-			// This is probably a really dumb and horrible way to do this
-			for (int k = (rand() % 250); k > 0; k--) {
-				wordDatabase >> word;
+			// This is probably a really dumb and horrible way to do This 					// ==============================
+			for (int k = (rand() % 250); k > 0; k--) {										// Look into optimizing this some 	
+				wordDatabase >> word;														// ==============================
 			}
 			wordDatabase >> word;
 		} while (word.length() != diffLength);
