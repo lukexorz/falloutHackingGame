@@ -139,8 +139,10 @@ void startGame () {
 
 		// Ensure the player's guess is lower case
 		for (int i = 0; i < playerGuess.length(); i++) {
-			tolower(playerGuess[i]);
+			if(playerGuess[i] <= 'Z' && playerGuess[i] >= 'A')
+				playerGuess[i] -= ('Z'-'z');
 		}
+		std::cout << "Guess: " << playerGuess << std::endl;
 
 		if (playerGuess != password) { // If player's guess isn't correct then check which letters (if any) match
 			--attempts;
