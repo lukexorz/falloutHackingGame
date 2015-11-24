@@ -7,6 +7,7 @@
 // The word list is provided by www.reddit.com/r/dailyprogrammer and is a .txt file
 
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -14,6 +15,8 @@
 #include <time.h>
 #include <algorithm>
 #include <cstdlib>
+#include "ncurses.h"
+#include <cmath>
 
 #define MAX_ATTEMPTS 4		// Maximum amount of times the player can guess the word
 
@@ -26,6 +29,7 @@ void displayWordBank ();
 void startGame();
 
 int main () {
+	srand(time(0));
 	setupGame();
 	displayWordBank();
 	startGame();
@@ -111,6 +115,14 @@ void getWords (const int diffChoice, const int diffLength) {
 
 // Displays the word bank with all words in upper-case
 void displayWordBank () {
+	// 65127 max
+	int hex_start = rand() % 65127;
+	for(int i = 0; i < 34; i++)
+	{
+		std::cout << "0x" << std::setbase(16) << std::setw(4) << std::setfill('0')  << hex_start << std::endl;
+		hex_start+=12;
+	}
+
 	for (int i = 0; i < wordList.size(); i++) {
 		std::string str = wordList[i];
 		// Nested loop to display the words as all upper-case
@@ -122,6 +134,18 @@ void displayWordBank () {
 	}
 	std::cout << std::endl;
 }
+
+// ASCII values of junk : 33 - 47, 58 - 64, 91-96, 123-126
+// two lines of title
+//
+// blank line
+// attempts line
+// blank line
+// beginning of text block 
+// 0x0000 ############ 0x0000 ############
+// 0x000C ############ 0x0000 ############
+// 17 lines long total
+// then the output is on the right, another space, then a >, then another 12
 
 // Begins the game, asking the player to guess and informing them if their guess is incorrect or correct
 // When incorrect, tell the player how close their guess was
@@ -147,7 +171,7 @@ void startGame () {
 			if(playerGuess[i] <= 'Z' && playerGuess[i] >= 'A')
 				playerGuess[i] -= ('Z'-'z');
 		}
-		std::cout << "Guess: " << playerGuess << std::endl;
+	//	std::cout << "Guess: " << playerGuess << std::endl;
 
 		if (playerGuess != password) { // If player's guess isn't correct then check which letters (if any) match
 			--attempts;
